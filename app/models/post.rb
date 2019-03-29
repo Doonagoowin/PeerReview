@@ -1,3 +1,3 @@
 class Post < ApplicationRecord
-  has_many :answers
+  has_many :answers, dependent: :destroy
 end
