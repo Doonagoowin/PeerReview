@@ -6,7 +6,7 @@ class Api::CohortsController < ApplicationController
 
   # create
   def create
-    @cohort = Cohort.new(item_params)
+    @cohort = Cohort.new(cohort_params)
     if @cohort.save
       render json: @cohort
     else
@@ -16,7 +16,7 @@ class Api::CohortsController < ApplicationController
 
   # update
   def update
-    if @cohort.update(item_params)
+    if @cohort.update(cohort_params)
       render json: @cohort
     else
       render json: { errors: @cohort.errors }, status: :unprocessable_entity
@@ -31,7 +31,7 @@ class Api::CohortsController < ApplicationController
   end
 
   private
-    def item_params
+    def cohort_params
       params.require(:cohort).permit(:class_name)
     end
 end
