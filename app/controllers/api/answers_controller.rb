@@ -1,11 +1,14 @@
 class Api::AnswersController < ApplicationController
+  before_action :set_post
+  before_action :set_answer, only: [:update, :destroy]
+
   def index
-    render json: Answer.all 
+    @answers = @post.answers
+    render json: @answers
   end
 
   def update
-    @answer = Answer.find(params[:id])
-    if @answer.update(answer_params)
+    if @answers.update(answer_params)
       render json: @answer
     else
       render json: { errors: @answer.errors }
@@ -13,7 +16,7 @@ class Api::AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new(answer_params)
+    @answer = @post.answers.new(answer_params)
     if @answer.save
       render json: @answer
     else
@@ -22,14 +25,21 @@ class Api::AnswersController < ApplicationController
   end
 
   def destroy
-    Answer.find(params[:id]).destroy
+    @answers.destroy
     render json: { message: 'Answer got deleted' }
   end
 
   private 
     def answer_params
-      params.require(:post).permit(:body)
+      params.require(:answer).permit(:body)
     end
 
-end
+    def set_post
+      @post = Post.find(params[:post_id])
+    end
+
+    def set_answer
+      @answer = Answer.find(params[:id])
+    end
+
 end

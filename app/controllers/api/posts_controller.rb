@@ -1,11 +1,13 @@
 class Api::PostsController < ApplicationController
+  before_action :authenticate_user!, only: [:update, :create, :destroy]
+
   def index
     render json: Post.all 
   end
 
   def update
-    @post = Post.find(params[:id])
-    if @post.update(post_params)
+    @post = current_user.posts.find(params[:id])
+    if current_user.posts.update(post_params)
       render json: @post
     else
       render json: { errors: @post.errors }
@@ -13,8 +15,8 @@ class Api::PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
-    if @post.save
+    @post = current_user.posts.new(post_params)
+    if current_user.posts.save
       render json: @post
     else
       render json: { errors: @post.errors }
@@ -22,7 +24,7 @@ class Api::PostsController < ApplicationController
   end
 
   def destroy
-    Post.find(params[:id]).destroy
+    current_user.posts.find(params[:id]).destroy
     render json: { message: 'Post got deleted' }
   end
 
@@ -30,6 +32,4 @@ class Api::PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:title, :body)
     end
-
-end
 end
