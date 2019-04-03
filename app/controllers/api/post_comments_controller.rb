@@ -32,7 +32,7 @@ class Api::PostCommentsController < ApplicationController
 
   private
     def postcomment_params
-      params.require(:postcomment).permit(:postcomment_id, :body)
+      params.require(:postcomment).permit(:postcomment_id)
     end
 
     def set_post
